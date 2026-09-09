@@ -25,6 +25,24 @@ body {
   opacity: 0.8;
 }
 
+.image-upload {
+  margin: 0.75rem 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.image-upload-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+}
+
+.image-upload-preview {
+  max-width: 100%;
+  border-radius: 8px;
+}
+
 .record-form {
   display: grid;
   gap: 0.5rem;

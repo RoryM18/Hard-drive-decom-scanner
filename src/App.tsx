@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { CameraScanner } from "./components/CameraScanner";
+import { ImageUpload } from "./components/ImageUpload";
 import { RecordForm } from "./components/RecordForm";
 import { RecordsTable } from "./components/RecordsTable";
 import { DriveRecord, emptyDraft } from "./types";
@@ -47,6 +48,7 @@ export default function App() {
     <div className="app">
       <h1>Hard Drive Decom Scanner</h1>
       <CameraScanner onSerialDetected={handleSerialDetected} onOcrResult={handleOcrResult} />
+      <ImageUpload onSerialDetected={handleSerialDetected} onOcrResult={handleOcrResult} />
       <RecordForm draft={draft} onChange={setDraft} onSave={handleSave} />
       <RecordsTable records={records} onDelete={handleDelete} />
     </div>
