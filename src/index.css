@@ -1,0 +1,72 @@
+:root {
+  color-scheme: light dark;
+  font-family: system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 1rem;
+  max-width: 480px;
+  margin-inline: auto;
+}
+
+.scanner-video {
+  width: 100%;
+  border-radius: 8px;
+  background: #000;
+}
+
+.scanner-error {
+  color: #c0392b;
+}
+
+.scanner-hint {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.record-form {
+  display: grid;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.record-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+}
+
+.record-field input {
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+.records-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  display: block;
+}
+
+th,
+td {
+  padding: 0.35rem;
+  border-bottom: 1px solid #8883;
+  text-align: left;
+  white-space: nowrap;
+}
+
+button {
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+}
