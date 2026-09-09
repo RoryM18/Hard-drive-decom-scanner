@@ -26,7 +26,7 @@ export function ImageUpload({ onSerialDetected, onOcrResult }: Props) {
 
       const canvas = imageToCanvas(image);
       const text = await recognizeFrame(canvas);
-      onOcrResult(parseLabelText(text), text);
+      onOcrResult(parseLabelText(text, serial ?? ""), text);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not process image");
     } finally {

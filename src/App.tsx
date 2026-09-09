@@ -12,6 +12,7 @@ type Draft = Omit<DriveRecord, "id" | "scannedAt">;
 export default function App() {
   const [records, setRecords] = useState<DriveRecord[]>(() => loadRecords());
   const [draft, setDraft] = useState<Draft>(() => emptyDraft());
+  const [lastOcrText, setLastOcrText] = useState<string>("");
 
   useEffect(() => {
     saveRecords(records);
@@ -21,9 +22,11 @@ export default function App() {
     setDraft((d) => (d.serial === serial ? d : { ...d, serial }));
   }, []);
 
-  const handleOcrResult = useCallback((guess: ParsedGuess, _rawText: string) => {
+  const handleOcrResult = useCallback((guess: ParsedGuess, rawText: string) => {
+    setLastOcrText(rawText);
     setDraft((d) => ({
       ...d,
+      serial: d.serial || guess.serial,
       make: d.make || guess.make,
       model: d.model || guess.model,
       capacity: d.capacity || guess.capacity,
@@ -49,6 +52,12 @@ export default function App() {
       <h1>Hard Drive Decom Scanner</h1>
       <CameraScanner onSerialDetected={handleSerialDetected} onOcrResult={handleOcrResult} />
       <ImageUpload onSerialDetected={handleSerialDetected} onOcrResult={handleOcrResult} />
+      {lastOcrText && (
+        <details className="ocr-raw">
+          <summary>Raw OCR text (check this if a field looks wrong)</summary>
+          <pre>{lastOcrText}</pre>
+        </details>
+      )}
       <RecordForm draft={draft} onChange={setDraft} onSave={handleSave} />
       <RecordsTable records={records} onDelete={handleDelete} />
     </div>

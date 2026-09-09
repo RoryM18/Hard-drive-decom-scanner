@@ -62,7 +62,7 @@ export function CameraScanner({ onSerialDetected, onOcrResult }: Props) {
     try {
       const canvas = captureVideoFrame(videoRef.current);
       const text = await recognizeFrame(canvas);
-      onOcrResult(parseLabelText(text), text);
+      onOcrResult(parseLabelText(text, lastSerial ?? ""), text);
     } catch (err) {
       setError(err instanceof Error ? err.message : "OCR failed");
     } finally {

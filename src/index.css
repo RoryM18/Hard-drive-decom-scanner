@@ -43,6 +43,19 @@ body {
   border-radius: 8px;
 }
 
+.ocr-raw {
+  font-size: 0.8rem;
+  margin: 0.5rem 0;
+}
+
+.ocr-raw pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: #8881;
+  padding: 0.5rem;
+  border-radius: 6px;
+}
+
 .record-form {
   display: grid;
   gap: 0.5rem;
