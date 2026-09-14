@@ -24,10 +24,23 @@ export function recordsToCsv(records: DriveRecord[]): string {
   return [header, ...rows].join("\r\n");
 }
 
-export function downloadCsv(records: DriveRecord[], filename = "drive-decom-log.csv") {
+export async function downloadCsv(records: DriveRecord[], filename = "drive-decom-log.csv") {
   const csv = recordsToCsv(records);
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
+  const file = new File([csv], filename, { type: "text/csv;charset=utf-8;" });
+
+  // on phones, hand straight to the native share sheet (OneDrive shows up
+  // as a target directly) instead of making the tech dig through Downloads
+  if (navigator.canShare?.({ files: [file] })) {
+    try {
+      await navigator.share({ files: [file], title: filename });
+      return;
+    } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") return;
+      // fall through to plain download if sharing failed for any other reason
+    }
+  }
+
+  const url = URL.createObjectURL(file);
   const a = document.createElement("a");
   a.href = url;
   a.download = filename;
