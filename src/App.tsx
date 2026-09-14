@@ -13,25 +13,40 @@ export default function App() {
   const [records, setRecords] = useState<DriveRecord[]>(() => loadRecords());
   const [draft, setDraft] = useState<Draft>(() => emptyDraft());
   const [lastOcrText, setLastOcrText] = useState<string>("");
+  const [serialMismatch, setSerialMismatch] = useState<string | null>(null);
 
   useEffect(() => {
     saveRecords(records);
   }, [records]);
 
   const handleSerialDetected = useCallback((serial: string) => {
+    setSerialMismatch(null);
     setDraft((d) => (d.serial === serial ? d : { ...d, serial }));
   }, []);
 
   const handleOcrResult = useCallback((guess: ParsedGuess, rawText: string) => {
     setLastOcrText(rawText);
-    setDraft((d) => ({
-      ...d,
-      serial: d.serial || guess.serial,
-      make: d.make || guess.make,
-      model: d.model || guess.model,
-      capacity: d.capacity || guess.capacity,
-    }));
+    setDraft((d) => {
+      // if the barcode already set a serial, don't silently overwrite it —
+      // but flag it when the label's printed "S/N:" text disagrees, since
+      // that usually means the wrong barcode on the label got scanned
+      if (d.serial && guess.serial && guess.serial !== d.serial) {
+        setSerialMismatch(guess.serial);
+      }
+      return {
+        ...d,
+        serial: d.serial || guess.serial,
+        make: d.make || guess.make,
+        model: d.model || guess.model,
+        capacity: d.capacity || guess.capacity,
+      };
+    });
   }, []);
+
+  function handleDraftChange(next: Draft) {
+    setSerialMismatch(null);
+    setDraft(next);
+  }
 
   function handleSave() {
     const record: DriveRecord = {
@@ -41,6 +56,7 @@ export default function App() {
     };
     setRecords((r) => [record, ...r]);
     setDraft((d) => ({ ...emptyDraft(), technician: d.technician }));
+    setSerialMismatch(null);
   }
 
   function handleDelete(id: string) {
@@ -72,7 +88,14 @@ export default function App() {
         <div className="card-title">
           <h2>Confirm details</h2>
         </div>
-        <RecordForm draft={draft} onChange={setDraft} onSave={handleSave} />
+        {serialMismatch && (
+          <p className="warning-banner">
+            Label text says the serial is <strong>{serialMismatch}</strong>, but the scanned
+            barcode read <strong>{draft.serial}</strong> — this usually means a different
+            barcode (e.g. part number) got scanned. Double-check before saving.
+          </p>
+        )}
+        <RecordForm draft={draft} onChange={handleDraftChange} onSave={handleSave} />
       </div>
 
       <RecordsTable records={records} onDelete={handleDelete} />

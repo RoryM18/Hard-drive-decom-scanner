@@ -25,7 +25,8 @@ const CAPACITY_LINE_RE = /(capacity)\s*[:#]?\s*(\d{1,4}(?:\.\d{1,2})?)\s?(GB|TB|
 const CAPACITY_RE = /\b(\d{1,4}(?:\.\d{1,2})?)\s?(GB|TB|MB)\b(?!\s*\/)/i;
 
 const MODEL_LINE_RE = /(model|part\s?no\.?|part\s?number|p\/n)\s*[:#]?\s*([A-Z0-9-]{4,})/i;
-const SERIAL_LINE_RE = /(serial\s?no\.?|serial\s?number|ser\.?\s?no\.?|s\/n)\s*[:#]?\s*([A-Z0-9-]{4,})/i;
+const SERIAL_LINE_RE =
+  /(serial\s?(no\.?|number)?|ser\.?\s?no\.?|s\/n|sn)\s*[:#]\s*([A-Z0-9-]{4,})/i;
 const BARE_CODE_RE = /\b([A-Z]{1,4}\d[A-Z0-9]{4,})\b/g;
 
 export interface ParsedGuess {
@@ -57,7 +58,7 @@ export function parseLabelText(rawText: string, knownSerial = ""): ParsedGuess {
     }
     if (!serial) {
       const labelledSerial = line.match(SERIAL_LINE_RE);
-      if (labelledSerial) serial = labelledSerial[2];
+      if (labelledSerial) serial = labelledSerial[3];
     }
     if (model && serial) break;
   }

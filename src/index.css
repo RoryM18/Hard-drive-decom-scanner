@@ -194,6 +194,18 @@ body {
   gap: 0.4rem;
 }
 
+.link-btn {
+  border: none;
+  background: none;
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  min-height: auto;
+}
+
 .pill {
   display: inline-flex;
   align-items: center;
@@ -264,6 +276,15 @@ body {
 }
 
 /* form */
+
+.warning-banner {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.7rem;
+  font-size: 0.8rem;
+  margin: 0;
+}
 
 .record-form {
   display: grid;

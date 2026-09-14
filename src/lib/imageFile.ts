@@ -1,5 +1,5 @@
-import { BrowserMultiFormatReader } from "@zxing/browser";
 import { NotFoundException } from "@zxing/library";
+import { createBarcodeReader } from "./barcodeReader";
 
 export function loadImageFromFile(file: File): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -16,7 +16,7 @@ export function loadImageFromFile(file: File): Promise<HTMLImageElement> {
 
 export async function decodeBarcodeFromImage(image: HTMLImageElement): Promise<string | null> {
   try {
-    const reader = new BrowserMultiFormatReader();
+    const reader = createBarcodeReader();
     const result = await reader.decodeFromImageElement(image);
     return result.getText();
   } catch (err) {
