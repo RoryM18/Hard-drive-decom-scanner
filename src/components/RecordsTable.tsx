@@ -1,5 +1,6 @@
 import { DriveRecord } from "../types";
 import { downloadCsv } from "../lib/csv";
+import { DownloadIcon, TrashIcon } from "./icons";
 
 interface Props {
   records: DriveRecord[];
@@ -8,45 +9,54 @@ interface Props {
 
 export function RecordsTable({ records, onDelete }: Props) {
   return (
-    <div className="records">
+    <div className="card">
       <div className="records-header">
-        <h2>Scanned drives ({records.length})</h2>
-        <button type="button" onClick={() => downloadCsv(records)} disabled={records.length === 0}>
-          Export CSV
+        <div className="card-title">
+          <h2>Scanned drives</h2>
+          <span className="records-count">{records.length}</span>
+        </div>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={() => downloadCsv(records)}
+          disabled={records.length === 0}
+        >
+          <DownloadIcon size={15} /> Export CSV
         </button>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Time</th>
-            <th>Serial</th>
-            <th>Make</th>
-            <th>Model</th>
-            <th>Capacity</th>
-            <th>Asset tag</th>
-            <th>Tech</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
+
+      {records.length === 0 ? (
+        <p className="empty-state">No drives scanned yet — scan a barcode or upload a label photo to get started.</p>
+      ) : (
+        <div className="records-list">
           {records.map((r) => (
-            <tr key={r.id}>
-              <td>{new Date(r.scannedAt).toLocaleTimeString()}</td>
-              <td>{r.serial}</td>
-              <td>{r.make}</td>
-              <td>{r.model}</td>
-              <td>{r.capacity}</td>
-              <td>{r.deviceAssetTag}</td>
-              <td>{r.technician}</td>
-              <td>
-                <button type="button" onClick={() => onDelete(r.id)}>
-                  Remove
-                </button>
-              </td>
-            </tr>
+            <div key={r.id} className="record-card">
+              <div className="record-card-top">
+                <span className="record-card-serial">{r.serial}</span>
+                <span className="record-card-time">
+                  {new Date(r.scannedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                </span>
+              </div>
+              <div className="record-card-meta">
+                {r.make && <span><strong>{r.make}</strong></span>}
+                {r.model && <span>{r.model}</span>}
+                {r.capacity && <span>{r.capacity}</span>}
+                {r.deviceAssetTag && <span>Tag: {r.deviceAssetTag}</span>}
+                {r.technician && <span>{r.technician}</span>}
+              </div>
+              <button
+                type="button"
+                className="btn btn-icon"
+                style={{ justifySelf: "end" }}
+                onClick={() => onDelete(r.id)}
+                aria-label="Remove record"
+              >
+                <TrashIcon />
+              </button>
+            </div>
           ))}
-        </tbody>
-      </table>
+        </div>
+      )}
     </div>
   );
 }

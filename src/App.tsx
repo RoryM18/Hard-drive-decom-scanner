@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import { CameraScanner } from "./components/CameraScanner";
-import { ImageUpload } from "./components/ImageUpload";
+import { ScanPanel } from "./components/ScanPanel";
 import { RecordForm } from "./components/RecordForm";
 import { RecordsTable } from "./components/RecordsTable";
+import { DriveIcon } from "./components/icons";
 import { DriveRecord, emptyDraft } from "./types";
 import { loadRecords, saveRecords } from "./lib/storage";
 import { ParsedGuess } from "./lib/parse";
@@ -49,16 +49,32 @@ export default function App() {
 
   return (
     <div className="app">
-      <h1>Hard Drive Decom Scanner</h1>
-      <CameraScanner onSerialDetected={handleSerialDetected} onOcrResult={handleOcrResult} />
-      <ImageUpload onSerialDetected={handleSerialDetected} onOcrResult={handleOcrResult} />
+      <header className="app-header">
+        <div className="app-header-icon">
+          <DriveIcon />
+        </div>
+        <div>
+          <h1>Drive Decom Scanner</h1>
+          <p>Scan, confirm, log — then export</p>
+        </div>
+      </header>
+
+      <ScanPanel onSerialDetected={handleSerialDetected} onOcrResult={handleOcrResult} />
+
       {lastOcrText && (
         <details className="ocr-raw">
           <summary>Raw OCR text (check this if a field looks wrong)</summary>
           <pre>{lastOcrText}</pre>
         </details>
       )}
-      <RecordForm draft={draft} onChange={setDraft} onSave={handleSave} />
+
+      <div className="card">
+        <div className="card-title">
+          <h2>Confirm details</h2>
+        </div>
+        <RecordForm draft={draft} onChange={setDraft} onSave={handleSave} />
+      </div>
+
       <RecordsTable records={records} onDelete={handleDelete} />
     </div>
   );

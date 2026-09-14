@@ -72,11 +72,18 @@ export function CameraScanner({ onSerialDetected, onOcrResult }: Props) {
 
   return (
     <div className="scanner">
-      <video ref={videoRef} className="scanner-video" muted playsInline />
+      <div className="scanner-frame">
+        <video ref={videoRef} className="scanner-video" muted playsInline />
+        <div className="scanner-guide" />
+      </div>
       {error && <p className="scanner-error">Camera error: {error}</p>}
-      {lastSerial && <p className="scanner-hint">Last barcode read: {lastSerial}</p>}
-      <button type="button" onClick={handleCaptureForOcr} disabled={ocrBusy}>
-        {ocrBusy ? "Reading label…" : "Capture label for OCR (model/make/capacity)"}
+      {lastSerial && (
+        <p className="scanner-hint">
+          Barcode read: <span className="pill">{lastSerial}</span>
+        </p>
+      )}
+      <button type="button" className="btn btn-primary btn-block" onClick={handleCaptureForOcr} disabled={ocrBusy}>
+        {ocrBusy ? "Reading label…" : "Capture label (model / make / capacity)"}
       </button>
     </div>
   );

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { decodeBarcodeFromImage, loadImageFromFile } from "../lib/imageFile";
 import { imageToCanvas, recognizeFrame } from "../lib/ocr";
 import { parseLabelText, ParsedGuess } from "../lib/parse";
+import { UploadIcon } from "./icons";
 
 interface Props {
   onSerialDetected: (serial: string) => void;
@@ -36,8 +37,9 @@ export function ImageUpload({ onSerialDetected, onOcrResult }: Props) {
 
   return (
     <div className="image-upload">
-      <label className="image-upload-label">
-        <span>Or upload a photo of the label</span>
+      <label className="upload-dropzone" style={{ position: "relative" }}>
+        <UploadIcon />
+        <span>Tap to choose a photo of the label</span>
         <input
           type="file"
           accept="image/*"

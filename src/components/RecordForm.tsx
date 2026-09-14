@@ -8,14 +8,14 @@ interface Props {
   onSave: () => void;
 }
 
-const FIELDS: { key: keyof Draft; label: string; required?: boolean }[] = [
-  { key: "serial", label: "Serial number", required: true },
+const FIELDS: { key: keyof Draft; label: string; required?: boolean; span2?: boolean }[] = [
+  { key: "serial", label: "Serial number", required: true, span2: true },
   { key: "make", label: "Make" },
   { key: "model", label: "Model number" },
   { key: "capacity", label: "Capacity" },
   { key: "deviceAssetTag", label: "Device asset tag" },
   { key: "technician", label: "Technician" },
-  { key: "notes", label: "Notes" },
+  { key: "notes", label: "Notes", span2: true },
 ];
 
 export function RecordForm({ draft, onChange, onSave }: Props) {
@@ -33,8 +33,8 @@ export function RecordForm({ draft, onChange, onSave }: Props) {
         if (canSave) onSave();
       }}
     >
-      {FIELDS.map(({ key, label, required }) => (
-        <label key={key} className="record-field">
+      {FIELDS.map(({ key, label, required, span2 }) => (
+        <label key={key} className={span2 ? "record-field span-2" : "record-field"}>
           <span>
             {label}
             {required ? " *" : ""}
@@ -46,7 +46,7 @@ export function RecordForm({ draft, onChange, onSave }: Props) {
           />
         </label>
       ))}
-      <button type="submit" disabled={!canSave}>
+      <button type="submit" className="btn btn-primary span-2" disabled={!canSave}>
         Add to log
       </button>
     </form>
