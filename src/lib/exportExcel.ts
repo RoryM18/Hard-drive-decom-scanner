@@ -27,23 +27,11 @@ async function recordsToXlsxFile(
 }
 
 /**
- * Shares/downloads a real .xlsx workbook (not a renamed CSV) so that phones
- * treat it as an Excel file — the OS share sheet and "open downloaded file"
- * prompts then offer/launch the Excel app directly instead of a generic
- * text viewer.
+ * Downloads a real .xlsx workbook (not a renamed CSV) so it opens correctly
+ * in Excel once the user taps the downloaded file.
  */
 export async function exportRecords(records: DriveRecord[], filename = "drive-decom-log.xlsx") {
   const file = await recordsToXlsxFile(records, filename);
-
-  if (navigator.canShare?.({ files: [file] })) {
-    try {
-      await navigator.share({ files: [file], title: filename });
-      return;
-    } catch (err) {
-      if (err instanceof DOMException && err.name === "AbortError") return;
-      // fall through to a plain download if sharing failed for any other reason
-    }
-  }
 
   const url = URL.createObjectURL(file);
   const a = document.createElement("a");
