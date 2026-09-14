@@ -1,5 +1,5 @@
 import { DriveRecord } from "../types";
-import { downloadCsv } from "../lib/csv";
+import { exportRecords } from "../lib/exportExcel";
 import { DownloadIcon, TrashIcon } from "./icons";
 
 interface Props {
@@ -18,10 +18,10 @@ export function RecordsTable({ records, onDelete }: Props) {
         <button
           type="button"
           className="btn btn-secondary"
-          onClick={() => downloadCsv(records)}
+          onClick={() => exportRecords(records)}
           disabled={records.length === 0}
         >
-          <DownloadIcon size={15} /> Export CSV
+          <DownloadIcon size={15} /> Export to Excel
         </button>
       </div>
 
